@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.job.dao.UserDao">
+
+    <insert id="addUser" parameterType="User">
+        insert into user values(null, #{name}, #{email}, #{password}, #{startEmail} )
+    </insert>
+
+    <delete id="deleteUser" parameterType="int">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="updateUser" parameterType="User">
+        update user set name=#{name}, email = #{email},
+        password = #{password} where id = #{id}
+    </update>
+
+    <update id="startEmailService" parameterType="int">
+        update user set start_email = 1 where id = #{0}
+    </update>
+
+    <update id="stopEmailService" parameterType="int">
+        update user set start_email = 0 where id = #{0}
+    </update>
+
+    <select id="getUser" resultMap="user" parameterType="int">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="getUserByEmail" resultMap="user" parameterType="String">
+        select * from user where email = #{email}
+    </select>
+
+    <select id="getSubscribedEmail" resultType="java.lang.String" >
+        select email from user where start_email = 1
+    </select>
+
+    <resultMap id="user" type="user">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="start_email" property="startEmail"/>
+    </resultMap>
+
+</mapper>

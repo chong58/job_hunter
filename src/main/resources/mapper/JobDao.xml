@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.job.dao.JobDao">
+
+    <select id="getTotal" resultType="int">
+        select count(*) from job
+    </select>
+
+    <insert id="addJob" parameterType="Job">
+        insert into job values(null, #{position}, #{companyName}, #{applicationDay}, #{applicationCloseDay}, #{status}, #{jobLink}, #{userId} )
+    </insert>
+
+    <delete id="deleteJob" parameterType="int">
+        delete from job where id = #{id}
+    </delete>
+
+    <update id="updateJob" parameterType="Job">
+        update job set company_name=#{companyName}, position = #{position},
+        application_day = #{applicationDay}, application_close_day = #{applicationCloseDay}, status = #{status}, position_link = #{jobLink} where id = #{id}
+    </update>
+
+    <select id="getJob" resultMap="job" parameterType="int">
+        select * from job where id = #{userId}
+    </select>
+
+    <resultMap id="job" type="job">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="company_name" property="companyName"/>
+        <result column="position" property="position"/>
+        <result column="application_day" property="applicationDay"/>
+        <result column="application_close_day" property="applicationCloseDay"/>
+        <result column="status" property="status"/>
+        <result column="position_link" property="jobLink"/>
+    </resultMap>
+
+    <select id="list" resultMap="job">
+        select * from job where user_id = #{param1} order by id desc limit #{param2}, #{param3}
+    </select>
+
+    <select id="getJobByName" resultMap="job">
+        select * from job where company_name = #{companyName}
+    </select>
+
+    <select id="getJobByTime" resultMap="job">
+        select * from job where user_id = #{param1} and TO_DAYS(application_day) = TO_DAYS(#{param2})
+    </select>
+
+</mapper>
